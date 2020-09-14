@@ -14,3 +14,4 @@ Module.symvers
 #
 .*.swp
 *~
+.vscode
