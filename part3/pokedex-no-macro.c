@@ -1,5 +1,6 @@
 #include <linux/module.h>
 #include <linux/printk.h>
+#include <linux/slab.h>
 
 /*
  * Undefine commonly used macros -- DO NOT MODIFY
@@ -29,20 +30,43 @@ void print_pokemon(struct pokemon *p)
 }
 
 /* TODO: declare a single static struct list_head, named pokedex */
+static struct list_head pokedex = {&pokedex, &pokedex};
 
 void add_pokemon(char *name, int dex_no)
 {
 	/* TODO: write your code here */
+	struct pokemon *new_pk;
+	new_pk = kmalloc(sizeof(*new_pk), GFP_KERNEL);
+	strcpy(new_pk->name, name);
+	new_pk->dex_no = dex_no;
+	pokedex.prev->next = &new_pk->list;
+	new_pk->list.prev = pokedex.prev;
+	pokedex.prev = &new_pk->list;
+	new_pk->list.next = &pokedex;
 }
 
 void print_pokedex(void)
 {
 	/* TODO: write your code here, using print_pokemon() */
+	struct list_head *pos;
+	for (pos=pokedex.next; pos!=&pokedex; pos=pos->next) {
+		int offset = (int) &((struct pokemon*) 0)->list;
+		struct pokemon *ppos = (struct pokemon*) ((char*) pos - offset);
+		print_pokemon(ppos);
+	}
 }
 
 void delete_pokedex(void)
 {
 	/* TODO: write your code here */
+	struct list_head *pos;
+	for (pos=pokedex.next; pos!=&pokedex; pos=pos->next) {
+		int offset = (int) &((struct pokemon*) 0)->list;
+		struct pokemon *ppos = (struct pokemon*) ((char*) pos - offset);
+		pos->prev->next = pos->next;
+		pos->next->prev = pos->prev;
+		kfree(ppos);
+	}
 }
 
 int pokedex_nom_init(void)
