@@ -97,4 +97,4 @@ module_exit( pokedex_nom_exit );
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("A handy Pokedex module, without list macros");
-MODULE_AUTHOR("SGG");
+MODULE_AUTHOR("zz2700");
