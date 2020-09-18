@@ -4,12 +4,21 @@ Part 1(a)
 1.  What actions does a kernel perform to context switch between processes?
 
 /* TODO */
+The kernel will save the general purpose registers, PC, and the kernel stack pointer 
+of the currently-excecuting process and restore the registers, PC, and switch to the
+kernel stack for the soon-to-be-excuting process.
+
 
 
 2.  What process state does a process enter immediately after it terminates?
     What is this state for, and when does it leave this state?
 
 /* TODO */
+The process enters the zombie state inmmediately after it terminates.
+Zombie state states for the state where a process has exited but has not yet
+been cleaned up.
+The process leaves zombie state when the OS cleans up all relevant data structures 
+of the process.
 
 
 Part 1(b)
